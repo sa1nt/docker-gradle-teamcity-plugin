@@ -14,10 +14,8 @@ open class DockerTeamcityPlugin : Plugin<Project> {
             val envVal = System.getenv(extension.envVarName)
             if (!envVal.isNullOrEmpty()) {
                 println("Applying TeamcityTestListener with ${extension.envVarName} = $envVal")
-                with(project.tasks) {
-                    withType(Test::class.java) {
-                        it.addTestListener(TeamcityTestListener())
-                    }
+                project.tasks.withType(Test::class.java) { testTask ->
+                    testTask.addTestListener(TeamcityTestListener())
                 }
             }
         }

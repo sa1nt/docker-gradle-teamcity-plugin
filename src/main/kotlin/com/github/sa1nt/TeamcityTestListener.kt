@@ -5,6 +5,10 @@ import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestResult
 import org.gradle.api.tasks.testing.TestResult.ResultType
 
+/**
+ * See: https://github.com/winterbe/jest-teamcity-reporter/blob/master/index.js as inspiration source
+ * See: https://confluence.jetbrains.com/display/TCD18/Build+Script+Interaction+with+TeamCity for formatting specifics
+ */
 class TeamcityTestListener : TestListener {
     override fun beforeSuite(suite: TestDescriptor) {
         println("##teamcity[testSuiteStarted name='${teamCityEscape(suite.name)}']")
@@ -30,10 +34,10 @@ class TeamcityTestListener : TestListener {
     }
 
     private fun teamCityEscape(s: String) : String {
-        return s.replace("'", "|'").
-                replace("\n", "|n").
-                replace("\r", "|r").
-                replace("[", "|[").
-                replace("]", "|]")
+        return s.replace("'", "|'")
+                .replace("\n", "|n")
+                .replace("\r", "|r")
+                .replace("[", "|[")
+                .replace("]", "|]")
     }
 }
