@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.2.60"
     id("java-gradle-plugin")
-    id("maven-publish")
+    id("com.gradle.plugin-publish") version "0.10.0"
 }
 
 group = "com.github.sa1nt"
@@ -26,6 +26,21 @@ gradlePlugin {
         create("docker-teamcity") {
             id = "com.github.sa1nt.docker-teamcity"
             implementationClass = "com.github.sa1nt.DockerTeamcityPlugin"
+        }
+    }
+}
+
+pluginBundle {
+    website = "https://github.com/sa1nt/docker-gradle-teamcity-plugin"
+    vcsUrl = "scm:git:git://github.com/sa1nt/docker-gradle-teamcity-plugin.git"
+    tags = listOf("default", "tags", "unless", "overridden", "in", "plugin")
+    (plugins) {
+        "docker-teamcity" {
+            // id is captured from gradlePlugin extension block
+            displayName = "Docker Teamcity Test Output"
+            description = "<Good human-readable description of what your plugin is about>"
+            tags = listOf("individual", "tags", "per", "plugin")
+            version = "0.1.5"
         }
     }
 }
