@@ -6,7 +6,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.0"
 }
 
-group = "com.github.sa1nt"
+group = "io.github.sa1nt"
 version = "0.1.5"
 
 repositories {
@@ -24,8 +24,8 @@ dependencies {
 gradlePlugin {
     plugins {
         create("docker-teamcity") {
-            id = "com.github.sa1nt.docker-teamcity"
-            implementationClass = "com.github.sa1nt.DockerTeamcityPlugin"
+            id = "io.github.sa1nt.docker-teamcity"
+            implementationClass = "io.github.sa1nt.DockerTeamcityPlugin"
         }
     }
 }

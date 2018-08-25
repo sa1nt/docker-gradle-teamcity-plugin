@@ -1,14 +1,14 @@
-package com.github.sa1nt
+package io.github.sa1nt
 
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
 
 internal class DockerTeamcityPluginTest {
-    lateinit var tempDir: File
+    private lateinit var tempDir: File
+    private val someVersion = "1.2"
 
     @BeforeEach
     internal fun setUp() {
@@ -17,10 +17,13 @@ internal class DockerTeamcityPluginTest {
 
     @Test
     internal fun `default envVarName`() {
+        val defaultVarName = "TEAMCITY_VERSION"
+        System.setProperty(defaultVarName, someVersion)
+
         File(tempDir, "build.gradle").run {
             writeText("""
                 plugins {
-                  id "com.github.sa1nt.docker-teamcity"
+                  id "io.github.sa1nt.docker-teamcity"
                 }
             """.trimIndent())
         }
@@ -31,16 +34,19 @@ internal class DockerTeamcityPluginTest {
                 .withArguments("tasks")
                 .build()
 
-        assertThat(buildResult.output.contains("Hello Plugin TEAMCITY_VERSION"))
+        assertThat(buildResult.output)
+                .contains("Applying TeamcityTestListener with $defaultVarName = $someVersion")
     }
 
     @Test
     internal fun `changed envVarName`() {
         val changedEnvVarName = "SOME_VAR"
+        System.setProperty(changedEnvVarName, someVersion)
+
         File(tempDir, "build.gradle").run {
             writeText("""
                 plugins {
-                  id "com.github.sa1nt.docker-teamcity"
+                  id "io.github.sa1nt.docker-teamcity"
                 }
 
                 dockerTeamcity {
@@ -55,6 +61,7 @@ internal class DockerTeamcityPluginTest {
                 .withArguments("tasks")
                 .build()
 
-        assertThat(buildResult.output.contains("Hello Plugin $changedEnvVarName"))
+        assertThat(buildResult.output)
+                .contains("Applying TeamcityTestListener with $changedEnvVarName = $someVersion")
     }
 }

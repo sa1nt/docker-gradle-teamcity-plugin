@@ -1,4 +1,4 @@
-package com.github.sa1nt
+package io.github.sa1nt
 
 import org.gradle.api.tasks.testing.TestListener
 import org.gradle.api.tasks.testing.TestDescriptor

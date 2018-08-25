@@ -1,4 +1,4 @@
-package com.github.sa1nt
+package io.github.sa1nt
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,13 +11,17 @@ open class DockerTeamcityPlugin : Plugin<Project> {
         }
 
         project.afterEvaluate {
-            val envVal = System.getenv(extension.envVarName)
-            if (!envVal.isNullOrEmpty()) {
-                println("Applying TeamcityTestListener with ${extension.envVarName} = $envVal")
+            val envVar = getEnvironmentVariable(extension.envVarName)
+            if (!envVar.isNullOrEmpty()) {
+                println("Applying TeamcityTestListener with ${extension.envVarName} = $envVar")
                 project.tasks.withType(Test::class.java) { testTask ->
                     testTask.addTestListener(TeamcityTestListener())
                 }
             }
         }
+    }
+
+    private fun getEnvironmentVariable(varName: String): String? {
+        return System.getProperty(varName)?: System.getenv(varName)
     }
 }
